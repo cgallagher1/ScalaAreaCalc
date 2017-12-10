@@ -40,7 +40,8 @@ object Source {
 
         println(" ")
 
-        println("The area underneath the curve " + functionCreator(terms) + " from " + lowerbound.toString + " to " + upperbound.toString + " is about ")
+        print("The area underneath the curve " + functionCreator(terms) + " from " + lowerbound.toString + " to " + upperbound.toString + " is about ")
+        println(areaCalc(terms, lowerbound, upperbound))
         
     } //End of Main
     //Creates a new Class called CoAndEx which takes two float parameters
@@ -118,10 +119,10 @@ object Source {
     //Find the height based on the passed in width
     def findHeight(terms: ArrayBuffer[CoAndEx], x: Float) : Float = {
         var retval = 0.0f
-        
+
         //Finds the height
         for(i <- 0 until terms.size){
-            retval += (terms(i).coefficient) * scala.math.pow(x, terms(i).exponent)
+            retval = retval + (terms(i).coefficient).toFloat * (scala.math.pow(x, terms(i).exponent)).toFloat
         }
 
         //The negative case
@@ -130,6 +131,28 @@ object Source {
         }
 
         return retval
+    }
+
+    //Calculates the area underneath the curve
+    def areaCalc(terms: ArrayBuffer[CoAndEx], lowerbound: Float, upperbound: Float) : Float = {
+        //Width
+        var width = 0.0001f + lowerbound
+        //Variable to hold area
+        var area = 0.0f
+        
+        //Keeps going until the width reaches the upperbound
+        while (width < upperbound){
+            //Gets the height at a specific width
+            var tempHeight = findHeight(terms, width)
+
+            //Muliplied by 0.0001 becuase we are using 1000 rectangles 
+            area = area +  (0.0001f * tempHeight)
+
+            //Increases width
+            width = width + 0.0001f
+        }
+
+        return area
     }
 
 
